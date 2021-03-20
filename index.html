@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset="UTF-8">
+    <title>Szeretetfalva</title>
+
+    <style>
+      td {
+        text-align: right;
+        min-width: 60px;
+      }
+      td.op {
+        opacity: 0.6;
+      }
+    </style>
+
+  </head>
+  <body>
+    <h1>Szeretetfalva</h1>
+    <h2>Kincstár</h2>
+    <h2>Tulajdonosok</h2>
+    <table id="shareholders"></table>
+  </body>
+
+  <script>
+    var shareholderList = document.getElementById('shareholders');
+
+    var jsonp = params => {
+      var script = document.createElement('script');
+      script.src = 'https://script.google.com/macros/s/AKfycbxNG1eVVZ_6dHR7wXtn5nD59lMCUX9RZUADxF8/exec?'+params;
+      document.getElementsByTagName('head')[0].appendChild(script);
+    }
+
+    function shareholdersLoaded(data) {
+      if (data.length === 0) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = `<td><strong>Valami baj van, nincsenek meg a tulajdonosok :(</strong></td>`
+        shareholderList.appendChild(tr);
+      }
+      for (var i = 0; i < data.length; i++) {
+        var name = data[i].name;
+        var total = val1(data[i]['Grand Total']);
+        var sweat = val1(data[i]['sweat']);
+        var funding = val1(data[i]['funding']);
+        var pnl = data[i]['pnl'];
+        var pnlf =  val2(pnl) + (pnl > 0 ? '📈' : '');
+        var tr = document.createElement('tr');
+        tr.innerHTML = `<td><strong>${name}</strong></td><td>${total}❤️</td><td class="op">${sweat}💪</td><td class="op">${funding}💰</td><td class="op">${pnlf}</td>`
+        shareholderList.appendChild(tr);
+      }
+    }
+
+    function val1(num) {
+      return Math.round(num * 10) / 10;
+    }
+    function val2(num) {
+      return Math.round(num * 100) / 100;
+    }
+
+    jsonp('callback=shareholdersLoaded&what=shareholders');
+
+  </script>
+</html>
