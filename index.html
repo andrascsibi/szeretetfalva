@@ -149,7 +149,7 @@
           value: val2(data[i].value),
           symbol: SYMBOL[currency] || '?',
         }
-        total += d.value;
+        total += data[i].value;
         ret.currencies.push(d);
       }
       ret.total = val2(total);
@@ -168,14 +168,15 @@
         people: [],
       };
       for (var i = 0; i < data.length; i++) {
+        var total = data[i]['Grand Total'];
         var d = {
           name: data[i].name,
-          total: val1(data[i]['Grand Total']),
-          sweat: val1(data[i].sweat),
-          funding: val1(data[i].funding),
+          total: val2(total),
+          sweat: val2(data[i].sweat),
+          funding: val2(data[i].funding),
           pnl: val2(data[i].pnl) + ' ' + (data[i].pnl > 0 ? '📈' : '📉'),
         }
-        ret.total += d.total;
+        ret.total += total;
         ret.people.push(d);
       }
       return ret;
