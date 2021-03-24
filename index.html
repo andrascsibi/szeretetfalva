@@ -54,8 +54,19 @@
     <script type="text/html" id="template">
 
 {{? it.shareholders }}
+<div style="text-align: center; opacity: 0.6">
+  <p>
+    1 🏘 = {{=it.constants.total_worth_str}} Ft
+  </p>
+  <p>
+    1 ❤️ = {{=it.constants.heart_price_str}} Ft
+  </p>
+  <p>
+    1 🏘 = {{=it.constants.total_hearts_str}} ❤️
+  </p>
+</div>
 <h3 class="big">
-  {{=it.shareholders.total}} ❤️ / {{=it.constants.total_hearts}} ❤️
+  {{=it.shareholders.total}} ❤️ / {{=it.constants.total_hearts_str}} ❤️
 </h3>
 <p class="hint">
   {{=it.percent}}% kész
@@ -185,6 +196,9 @@
 
     function constantsLoaded(data) {
       data.total = data.total_hearts / 1e6 + ' millió Ft'
+      data.total_worth_str = withThousandSeparators(data.total_worth);
+      data.total_hearts_str = withThousandSeparators(data.total_hearts);
+      data.heart_price_str = withThousandSeparators(data.heart_price);
       return data;
     }
 
@@ -194,6 +208,15 @@
     function val2(num) {
       return Math.round(num * 100) / 100;
     }
+
+    function withThousandSeparators(x) {
+      x = x.toString();
+      var pattern = /(-?\d+)(\d{3})/;
+      while (pattern.test(x))
+        x = x.replace(pattern, "$1 $2");
+      return x;
+    }
+
 
     var jsonp = params => {
       var script = document.createElement('script');
