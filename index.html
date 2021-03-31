@@ -156,14 +156,14 @@
         var currency = data[i].currency;
         var d = {
           currency: currency,
-          balance: data[i].balance,
+          balance: val8(data[i].balance),
           value: val2(data[i].value),
           symbol: SYMBOL[currency] || '?',
         }
         total += data[i].value;
         ret.currencies.push(d);
       }
-      ret.total = val2(total);
+      ret.total = withThousandSeparators(Math.round(total));
       return ret;
     }
 
@@ -207,6 +207,9 @@
     }
     function val2(num) {
       return Math.round(num * 100) / 100;
+    }
+    function val8(num) {
+      return Math.round(num * 1e8) / 1e8;
     }
 
     function withThousandSeparators(x) {
